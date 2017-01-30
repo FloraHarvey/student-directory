@@ -5,11 +5,22 @@ def print_header
   puts "----------------"
 end
 
+#def print(students)
+#  students.each_with_index do |student, index|
+#    if student[:name].length < 12
+#    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+#    end
+#  end
+#end
+
 def print(students)
-  students.each_with_index do |student, index|
-    if student[:name].length < 12
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-    end
+  count = 0
+# Note that students is now being stored as an array of hashes.
+# To iterate using while, need to refer to index before referencing key,
+# otherwise you get a type error.
+  while count <= students.count - 1
+    puts "#{students[count][:name]} (#{students[count][:cohort]} cohort)"
+    count += 1
   end
 end
 
