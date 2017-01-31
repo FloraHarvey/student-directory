@@ -20,13 +20,17 @@ def input_students
 
   students = []
 
+
   name = gets.chomp
-  hobby = ""
-  nationality = ""
+
+# Supplies default values if user input is empty
+  cohort = :November
+  hobby = "Being bad"
+  nationality = "Unknown"
 
   while !name.empty? do
 
-    students << {name: name, cohort: :november, hobby: hobby, nationality: nationality}
+    students << {name: name, cohort: cohort, hobby: hobby, nationality: nationality}
     puts "Now we have #{students.count} students"
 
     name = gets.chomp
@@ -34,11 +38,27 @@ def input_students
 
   puts "Please enter some further information about each student."
 
+require "Date"
+
   students.each do |student|
+    puts "Which cohort is #{student[:name]} in?"
+    cohort = gets.chomp.capitalize
+# Checks if cohort is a valid month
+      if Date::MONTHNAMES.include? cohort
+        student[:cohort] = cohort.to_sym
+      else puts "Please give a valid month."
+        cohort = gets.chomp
+      end
     puts "What is #{student[:name]}'s favourite hobby?"
-    student[:hobby] = gets.chomp
+      hobby = gets.chomp
+      if !hobby.empty?
+        student[:hobby] = hobby
+      end
     puts "Where is #{student[:name]} from?"
-    student[:nationality] = gets.chomp
+    nationality = gets.chomp
+    if !nationality.empty?
+      student[:nationality] = nationality
+    end
   end
 
   students
