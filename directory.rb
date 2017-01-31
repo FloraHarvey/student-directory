@@ -13,20 +13,6 @@ end
 #  end
 #end
 
-def print(students)
-  count = 0
-# Note that students is now being stored as an array of hashes.
-# To iterate using while, need to refer to index before referencing key,
-# otherwise you get a type error.
-  while count <= students.count - 1
-    puts "#{students[count][:name]} (#{students[count][:cohort]} cohort)"
-    count += 1
-  end
-end
-
-def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
-end
 
 def input_students
   puts "Please enter the names of the students"
@@ -35,15 +21,43 @@ def input_students
   students = []
 
   name = gets.chomp
+  hobby = ""
+  nationality = ""
 
   while !name.empty? do
 
-    students << {name: name, cohort: :november}
+    students << {name: name, cohort: :november, hobby: hobby, nationality: nationality}
     puts "Now we have #{students.count} students"
 
     name = gets.chomp
   end
+
+  puts "Please enter some further information about each student."
+
+  students.each do |student|
+    puts "What is #{student[:name]}'s favourite hobby?"
+    student[:hobby] = gets.chomp
+    puts "Where is #{student[:name]} from?"
+    student[:nationality] = gets.chomp
+  end
+
   students
+end
+
+def print(students)
+  count = 0
+# Note that students is now being stored as an array of hashes.
+# To iterate using while, need to refer to index before referencing key,
+# otherwise you get a type error.
+  while count <= students.count - 1
+    puts "#{students[count][:name]} (#{students[count][:cohort]} cohort).
+    Hobby: #{students[count][:hobby]}, Nationality: #{students[count][:nationality]}"
+    count += 1
+  end
+end
+
+def print_footer(names)
+  puts "Overall, we have #{names.count} great students"
 end
 
 students = input_students
