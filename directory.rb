@@ -5,13 +5,9 @@ def print_header
   puts "----------------"
 end
 
-#def print(students)
-#  students.each_with_index do |student, index|
-#    if student[:name].length < 12
-#    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-#    end
-#  end
-#end
+def sing_or_plural (students)
+  students.count > 1 ? "s" : ""
+end
 
 
 def input_students
@@ -19,8 +15,6 @@ def input_students
   puts "To finish, just hit return twice"
 
   students = []
-
-
   name = gets.chomp
 
 # Supplies default values if user input is empty
@@ -29,16 +23,15 @@ def input_students
   nationality = "Unknown"
 
   while !name.empty? do
-
     students << {name: name, cohort: cohort, hobby: hobby, nationality: nationality}
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{students.count} student#{sing_or_plural(students)}"
 
     name = gets.chomp
   end
 
   puts "Please enter some further information about each student."
 
-require "Date"
+  require "Date"
 
   students.each do |student|
     puts "Which cohort is #{student[:name]} in?"
@@ -61,7 +54,7 @@ require "Date"
     end
   end
 
-  students
+   students
 end
 
 # Prints students grouped by cohort
