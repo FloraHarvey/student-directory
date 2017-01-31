@@ -64,15 +64,18 @@ require "Date"
   students
 end
 
+# Prints students grouped by cohort
 def print(students)
-  count = 0
-# Note that students is now being stored as an array of hashes.
-# To iterate using while, need to refer to index before referencing key,
-# otherwise you get a type error.
-  while count <= students.count - 1
-    puts "#{students[count][:name]} (#{students[count][:cohort]} cohort).".center(60)
-    puts "Hobby: #{students[count][:hobby]}, Nationality: #{students[count][:nationality]}".center(60)
-    count += 1
+  existing_cohorts = students.map do |student|
+    student[:cohort]
+  end.uniq
+  existing_cohorts.each do |cohort|
+    puts "The students in the #{cohort.to_s} cohort are:"
+    students.each do |student|
+      if student[:cohort] == cohort
+         puts student[:name]
+      end
+    end
   end
 end
 
