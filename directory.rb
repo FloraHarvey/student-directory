@@ -15,7 +15,7 @@ def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
 
-  name = gets.chomp
+  name = STDIN.gets.chomp
 
 # Supplies default values if user input is empty
   cohort = :November
@@ -26,7 +26,7 @@ def input_students
     @students << {name: name, cohort: cohort, hobby: hobby, nationality: nationality}
     puts "Now we have #{@students.count} student#{sing_or_plural(@students)}"
 
-    name = gets.chomp
+    name = STDIN.gets.chomp
   end
 
   puts "Please enter some further information about each student."
@@ -40,15 +40,15 @@ def input_students
       if Date::MONTHNAMES.include? cohort
         student[:cohort] = cohort.to_sym
       else puts "Please give a valid month."
-        cohort = gets.chomp
+        cohort = STDIN.gets.chomp
       end
     puts "What is #{student[:name]}'s favourite hobby?"
-      hobby = gets.chomp
+      hobby = STDIN.gets.chomp
       if !hobby.empty?
         student[:hobby] = hobby
       end
     puts "Where is #{student[:name]} from?"
-    nationality = gets.chomp
+    nationality = STDIN.gets.chomp
     if !nationality.empty?
       student[:nationality] = nationality
     end
@@ -112,7 +112,7 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -126,8 +126,8 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(",")
     @students << {name: name, cohort: cohort.to_sym}
@@ -135,5 +135,17 @@ def load_students
   file.close
 end
 
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+      puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist"
+    exit
+  end
+end
 
+try_load_students
 interactive_menu
