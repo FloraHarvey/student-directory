@@ -21,33 +21,43 @@ def add_student_info(name, cohort = :November)
   @students << {name: name, cohort: cohort}
 end
 
+def input_name
+  name = STDIN.gets.chomp
+end
+
+def input_cohort(name)
+  require "Date"
+  puts "Which cohort is #{name} in?"
+  cohort = STDIN.gets.chomp.capitalize
+  # Checks if cohort is a valid month
+  if Date::MONTHNAMES.include? cohort
+    cohort = cohort.to_sym
+    add_student_info(name, cohort)
+  else puts "Please give a valid month."
+    cohort = STDIN.gets.chomp
+  end
+end
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
-
-  name = STDIN.gets.chomp
-
-  require "Date"
+  name = input_name
   while !name.empty? do
-    puts "Which cohort is #{name} in?"
-    cohort = STDIN.gets.chomp.capitalize
-    # Checks if cohort is a valid month
-      if Date::MONTHNAMES.include? cohort
-        cohort = cohort.to_sym
-        add_student_info(name, cohort)
-      else puts "Please give a valid month."
-        cohort = STDIN.gets.chomp
-      end
+    input_cohort(name)
     puts "Now we have #{@students.count} student#{sing_or_plural(@students)}"
-    name = STDIN.gets.chomp
+    name = input_name
   end
+end
+
+def get_cohort_list
+  existing_cohorts = @students.map do |student|
+    student[:cohort]
+  end.uniq
 end
 
 # Prints students grouped by cohort
 def print_student_list
-  existing_cohorts = @students.map do |student|
-    student[:cohort]
-  end.uniq
+  existing_cohorts = get_cohort_list
   existing_cohorts.each do |cohort|
     puts "The students in the #{cohort.to_s} cohort are:"
     @students.each do |student|
