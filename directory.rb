@@ -74,8 +74,8 @@ def print_menu
   puts "Please select one of the following options by entering a number, followed by return."
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list to a file"
+  puts "4. Load the list from a file"
   puts "9. Exit"
 end
 
@@ -93,10 +93,11 @@ def process(selection)
       show_students
     when "3"
       save_students
-      puts "Saved student list to students.csv"
+      puts "Saved student list to #{@filename}"
     when "4"
-      load_students
-      puts "Loaded student list from students.csv"
+      get_filename
+      load_students(@filename)
+      puts "Loaded student list from #{@filename}"
     when "9"
       exit
     else
@@ -111,8 +112,14 @@ def interactive_menu
   end
 end
 
+def get_filename
+  puts "Please type the name of the file"
+  @filename = STDIN.gets.chomp
+end
+
 def save_students
-  file = File.open("students.csv", "w")
+  get_filename
+  file = File.open(@filename, "w")
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
