@@ -6,10 +6,20 @@ def print_header
   puts "----------------"
 end
 
+def print_footer
+  if @students.count > 0
+    puts "Overall, we have #{@students.count} great student#{sing_or_plural(@students)}"
+  else puts "We currently have no students."
+  end
+end
+
 def sing_or_plural(person)
   person.count > 1 ? "s" : ""
 end
 
+def add_student_info(name, cohort = :November)
+  @students << {name: name, cohort: cohort}
+end
 
 def input_students
   puts "Please enter the names of the students"
@@ -17,46 +27,24 @@ def input_students
 
   name = STDIN.gets.chomp
 
-# Supplies default values if user input is empty
-  cohort = :November
-  hobby = "Being bad"
-  nationality = "Unknown"
-
-  while !name.empty? do
-    @students << {name: name, cohort: cohort, hobby: hobby, nationality: nationality}
-    puts "Now we have #{@students.count} student#{sing_or_plural(@students)}"
-
-    name = STDIN.gets.chomp
-  end
-
-  puts "Please enter some further information about each student."
-
   require "Date"
-
-  @students.each do |student|
-    puts "Which cohort is #{student[:name]} in?"
-    cohort = gets.chomp.capitalize
-# Checks if cohort is a valid month
+  while !name.empty? do
+    puts "Which cohort is #{name} in?"
+    cohort = STDIN.gets.chomp.capitalize
+    # Checks if cohort is a valid month
       if Date::MONTHNAMES.include? cohort
-        student[:cohort] = cohort.to_sym
+        cohort = cohort.to_sym
+        add_student_info(name, cohort)
       else puts "Please give a valid month."
         cohort = STDIN.gets.chomp
       end
-    puts "What is #{student[:name]}'s favourite hobby?"
-      hobby = STDIN.gets.chomp
-      if !hobby.empty?
-        student[:hobby] = hobby
-      end
-    puts "Where is #{student[:name]} from?"
-    nationality = STDIN.gets.chomp
-    if !nationality.empty?
-      student[:nationality] = nationality
-    end
+    puts "Now we have #{@students.count} student#{sing_or_plural(@students)}"
+    name = STDIN.gets.chomp
   end
 end
 
 # Prints students grouped by cohort
-def print_students_list
+def print_student_list
   existing_cohorts = @students.map do |student|
     student[:cohort]
   end.uniq
@@ -70,12 +58,7 @@ def print_students_list
   end
 end
 
-def print_footer
-  if @students.count > 0
-    puts "Overall, we have #{@students.count} great student#{sing_or_plural(@students)}"
-  else puts "We currently have no students."
-  end
-end
+
 
 def print_menu
   puts "Please select one of the following options by entering a number, followed by return."
@@ -88,7 +71,7 @@ end
 
 def show_students
   print_header
-  print_students_list
+  print_student_list
   print_footer
 end
 
@@ -130,7 +113,8 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym}
+    cohort = cohort.to_sym
+    add_student_info(name, cohort)
   end
   file.close
 end
