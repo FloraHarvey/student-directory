@@ -122,15 +122,13 @@ require 'csv'
 
 def save_students
   get_filename
-  File.open(@filename, "w") do |file|
+  CSV.open(@filename, "w") do |file|
     @students.each do |student|
       student_data = [student[:name], student[:cohort]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+      file.puts student_data
     end
   end
 end
-
 
 def load_students(filename = "students.csv")
   CSV.foreach(filename) do |line|
