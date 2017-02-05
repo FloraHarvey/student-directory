@@ -117,6 +117,9 @@ def get_filename
   @filename = STDIN.gets.chomp
 end
 
+
+require 'csv'
+
 def save_students
   get_filename
   File.open(@filename, "w") do |file|
@@ -128,13 +131,12 @@ def save_students
   end
 end
 
+
 def load_students(filename = "students.csv")
-  File.open(filename, "r") do |file|
-    file.readlines.each do |line|
-      name, cohort = line.chomp.split(",")
-      cohort = cohort.to_sym
-      add_student_info(name, cohort)
-    end
+  CSV.foreach(filename) do |line|
+    name, cohort = line
+    cohort = cohort.to_sym
+    add_student_info(name, cohort)
   end
 end
 
